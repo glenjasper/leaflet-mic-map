@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Leaflet</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Load Leaflet: http://leafletjs.com/ -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+
+        <!-- https://github.com/StephSaephan/leaflet-map-example -->
+        <script src="resources/js/leaflet-providers.js" type="text/javascript"></script>
+
+        <!-- https://github.com/ismyrnow/leaflet-groupedlayercontrol -->
+        <link rel="stylesheet" href="resources/css/leaflet.groupedlayercontrol.css">
+        <script src="resources/js/leaflet.groupedlayercontrol.js" type="text/javascript"></script>
+
+        <!-- https://github.com/lvoogdt/Leaflet.awesome-markers -->
+        <link rel="stylesheet" href="resources/css/leaflet.awesome-markers.css">
+        <script src="resources/js/leaflet.awesome-markers.js"></script>
+
+        <!-- https://github.com/Leaflet/Leaflet.markercluster -->
+        <link rel="stylesheet" href="resources/css/MarkerCluster.css">
+        <link rel="stylesheet" href="resources/css/MarkerCluster.Default.css">
+        <script src="resources/js/leaflet.markercluster-src.js" type="text/javascript"></script>
+
+        <!-- fontawesome -->
+        <link href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+        <style>
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            html,
+            body,
+            #mapid {
+                height: 100%;
+                width: 100%;
+            }
+            .font-size-title {
+                font-size: 15px;
+                font-weight: bold;
+            }
+            .font-size-body {
+                font-size: 12px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="mapid"></div>
+
+        <script>
+            const mymap = L.map('mapid').setView([35, -5], 3);
+            //mymap.zoomControl.setPosition('bottomright');
+
+            const marker_icon = L.AwesomeMarkers.icon({icon: 'tint', prefix: 'fa', markerColor: 'red'});
+
+            var locations = [
+                [-18.1685423859614, 122.061664140855, 'North-west coast of Western Australia<br>Samples: PW1, PW2, PW3, PW4, PW5, PW6, IW'],
+                [45.5528219168826, -122.951949549807, 'Washington County<br>Samples: HP1, HP2, FWT'],
+                [51.0780289354811, -114.132090473634, 'Calgary University<br># Samples: 45'],
+                [4.86796263571893, 7.10936939966182, 'Obigbo North<br>Samples: OBPW-T, OBPW-NT, OBIW, OBCR, OBPG-1, OBPG-2'],
+                [9.06624705675619, 7.48694961045008, 'Nigerian Petroleum Technology Development Fund<br>Samples: Sludge sample'],
+                [4.89477213692837, 7.12081463732918, 'Obigbo North<br>Samples: OBPW-T, OBPW-NT, OBIW, OBCR, OBPG-1, OBPG-2'],
+                [53.533935204028, 8.51224092886597, 'Wintershall Field Northern Germany<br># Samples: Multiple'],
+                [4.70558875450873, 4.58215386457409, 'Bonga field<br>Samples: PW-HI-IN, PW-LPS-IN, PW-BOT-IN, PW-AFT, PIG-1, PIG-2, BTIW'],
+                [40.0230933300067, 139.926853616759, 'Akita oil field<br>Samples: Oilfield water (OFW)'],
+                [53.0829555180294, -111.766069712374, 'Canadian oil field<br>Samples: 02/15, 100/07, 102/07, 103/06, 104/02'],
+                [3.85251993173161, 4.34904232189218, 'The Atlantic shelf of Africa in the Gulf of Guinea<br>Samples: A, B, C'],
+                [32.375352607531, 119.422026649044, 'Jiangsu oilfield<br>Samples: W2 (2-53, 2-71), W9 (9-18, 9-14), W11 (11-7, 11-6)'],
+                [58.8192510227362, 4.80707347054243, 'Two adjacent oil-fields, both located in the Norwegian sector of the North Sea<br>Samples: LC3, HC3, LC11, HC11'],
+                [4.8923084104028, 7.12208948814393, 'Obigbo North<br>Samples: WTP1, COTP2'],
+                [55.3523325115667, 4.17057149177674, 'Halfdan oil field<br># Samples: 32'],
+                [28.1489850647925, -87.5782766761145, 'The Gulf of Mexico<br># Samples: 3'],
+                [5.60404717509421, 5.20132744777759, 'Escravos oil production facilities <br>Samples: SKP_W1, SKP_W2, SKP_SED'],
+                [9.06608151299543, 7.4867551503187, 'Nigerian Petroleum Technology Development Fund<br>Samples: OB_PO, MR_PO, ESC_SL'],
+                [4.8645307195698, 7.09475000743104, 'Obigbo oil field<br>Samples: 1_PW, 2_PW, 3_IW, 4_PigWater, 5_Crude, 6_PS, 7_PS'],
+                [5.59964497244154, 5.20103828794215, 'Escravos and Meren oil production facilities<br># Samples: 7'],
+                [46.610605452324, 124.882756500436, 'Daqing Oilfield<br>Samples: S1, S2'],
+                [9.06637624570201, 7.48694461543828, 'Nigerian Petroleum Technology Development Fund<br>Samples: WTP1, COTP2'],
+                [45.5968889754894, 84.8836406170551, 'Xinjiang Luliang Oil Field by PetroChina<br>Samples: Lu3064, Lu3084, Lu3065, Lu3096'],
+                [4.47179374699854, 5.31524980445271, 'The Obigbo and Bonga fields<br>Samples: 2N3, CR6, 2N1, 2N2, 2N6, 2N5, CR4, 2N4, PPL1, PPL2, 3N3, CR1, 3N4, 3N2, 3N1, CR2'],
+                [70.3995001329596, -149.033774452136, 'West Sak, Kuparuk and Prudhoe Bay fields on the North Slope of Alaska<br># Samples: 13'],
+                [56.9059391554327, -114.529033193999, 'Northern Alberta<br>Samples: PW7, P0866, P0866S, P0848S, PW8, PW8-PAS, PW8-PAW'],
+                [60.9121564082467, 8.06709712256025, 'An Oil and gas company located in Norway<br>Samples: PIG1, PIG2, PIG5'],
+                [35.2058438800264, -97.4456928996844, 'University of Oklahoma Biocorrosion Research Center Consortium<br>Samples: A, B, C'],
+                [35.2047013639372, -97.4456707846584, 'University of Oklahoma Biocorrosion Research Center Consortium<br>Samples: SEP, SEA, SPW, INJ, PIG'],
+                [69.4582622716284, -153.960809014729, 'The North Slope of Alaska<br>Samples: 2P, 2L, 2T, 2K, 2U, PS, CO, TS, SW'],
+                [55.4613680982019, 8.24911016505546, 'The Dan and Halfdan oil fields<br>Samples: PW-Dan, PW-Halfdan'],
+                [18.0112771928619, -92.947688288571, 'Mexican Southeast region, Tabasco<br>Samples: M1, M2'],
+                [27.7602192306967, -89.3269146663086, 'The Gulf of Mexico<br># Samples: Multiple']
+            ];
+
+            const tileUrl = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png';
+            const attribution = '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+            const tiles = L.tileLayer(tileUrl, { attribution });
+            tiles.addTo(mymap);
+
+            // https://leaflet-extras.github.io/leaflet-providers/preview
+            const tile_OSM_mapnik = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+            const tile_OSM_hot = 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
+            const tile_Stamen_Watercolor = 'https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png';
+            const tile_Esri_DeLorme = 'https://server.arcgisonline.com/ArcGIS/rest/services/Specialty/DeLorme_World_Base_Map/MapServer/tile/{z}/{y}/{x}.png';
+            const tile_Esri_WorldTopoMap = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png';
+            const tile_Esri_NatGeoWorldMap = 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}.png';
+            const tile_Wikimedia = 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png';
+            const tile_GeoportailFrance_ignMaps = 'https://wxs.ign.fr/choisirgeoportail/geoportail/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&LAYER=GEOGRAPHICALGRIDSYSTEMS.MAPS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}';
+
+            //var defaultBase = L.tileLayer.provider('Stamen.TonerLite').addTo(mymap);
+            const baseLayers = {
+                'ArcGIS': tiles,
+                'OSM.Mapnik': L.tileLayer(tile_OSM_mapnik, { attribution }),
+                'OSM.Hot': L.tileLayer(tile_OSM_hot, { attribution }),
+                'OSM.Topo': L.tileLayer.provider('OpenTopoMap'),
+                'ESRI.DeLorme': L.tileLayer(tile_Esri_DeLorme, { attribution }),
+                'ESRI.WorldTopoMap': L.tileLayer(tile_Esri_WorldTopoMap, { attribution }),
+                'ESRI.NatGeoWorldMap': L.tileLayer(tile_Esri_NatGeoWorldMap, { attribution }),
+                'USGS.TNM': L.tileLayer.provider('USGSTNM'),
+                'Wikimedia': L.tileLayer(tile_Wikimedia, { attribution }),
+            };
+
+            // add layer switch control
+            L.control.groupedLayers(baseLayers).addTo(mymap);
+
+            // add scale bar to map
+            L.control.scale({ position: 'bottomleft' }).addTo(mymap);
+
+            // Marker Cluster
+            var markers = L.markerClusterGroup();
+            for (var i = 0; i < locations.length; i++) {
+                marker = new L.marker([locations[i][0], locations[i][1]], { icon: marker_icon })
+                                .bindPopup(locations[i][2]);
+                markers.addLayer(marker);
+            }
+            mymap.addLayer(markers);
+        </script>
+    </body>
+</html>
